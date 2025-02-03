@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analog Clock & Calendar</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: black;
+            position: relative;
+        }
+        .clock {
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            border: 2px solid white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .hand {
+            position: absolute;
+            bottom: 50%;
+            background: white;
+            transform-origin: bottom;
+            transition: all 0.05s linear;
+        }
+        .hour {
+            width: 6px;
+            height: 90px;
+        }
+        .minute {
+            width: 4px;
+            height: 130px;
+        }
+        .second {
+            width: 2px;
+            height: 160px;
+            background: red;
+        }
+        .center {
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+        }
+        .calendar-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            text-align: center;
+            color: white;
+            font-size: 14px;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+            text-align: center;
+            color: white;
+            font-size: 14px;
+        }
+        .calendar div {
+            padding: 5px;
+        }
+        .today {
+            background: red;
+            color: white;
+        }
+        .weekday {
+            font-weight: bold;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="clock">
+        <div class="hand hour" id="hour"></div>
+        <div class="hand minute" id="minute"></div>
+        <div class="hand second" id="second"></div>
+        <div class="center"></div>
+    </div>
+    <div class="calendar-container">
+        <div class="calendar" id="calendar"></div>
+    </div>
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const hours = now.getHours() % 12;
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+            
+            const hourAngle = (hours * 30) + (minutes * 0.5);
+            const minuteAngle = (minutes * 6) + (seconds * 0.1);
+            const secondAngle = seconds * 6;
+            
+            document.getElementById('hour').style.transform = `rotate(${hourAngle}deg)`;
+            document.getElementById('minute').style.transform = `rotate(${minuteAngle}deg)`;
+            document.getElementById('second').style.transform = `rotate(${secondAngle}deg)`;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+        
+        function generateCalendar() {
+            const now = new Date();
+            const today = now.getDate();
+            const firstDay = new Date(now.getFullYear(), now.getMonth(), 1).getDay();
+            const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+            const calendar = document.getElementById('calendar');
+            calendar.innerHTML = '';
+            
+            const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            weekdays.forEach(day => {
+                const weekdayCell = document.createElement('div');
+                weekdayCell.textContent = day;
+                weekdayCell.classList.add('weekday');
+                calendar.appendChild(weekdayCell);
+            });
+            
+            for (let i = 0; i < firstDay; i++) {
+                const emptyCell = document.createElement('div');
+                calendar.appendChild(emptyCell);
+            }
+            
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayCell = document.createElement('div');
+                dayCell.textContent = day;
+                if (day === today) {
+                    dayCell.classList.add('today');
+                }
+                calendar.appendChild(dayCell);
+            }
+        }
+        generateCalendar();
+    </script>
+</body>
+</html>
