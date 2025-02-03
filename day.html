@@ -87,6 +87,23 @@
         .weekday {
             font-weight: bold;
         }
+        .fullscreen-button {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid white;
+            color: white;
+            font-size: 14px;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: opacity 0.3s;
+            opacity: 0.5;
+        }
+        .fullscreen-button:hover {
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -99,6 +116,7 @@
     <div class="calendar-container">
         <div class="calendar" id="calendar"></div>
     </div>
+    <button class="fullscreen-button" onclick="toggleFullScreen()">⛶</button>
     <script>
         function updateClock() {
             const now = new Date();
@@ -148,6 +166,14 @@
             }
         }
         generateCalendar();
+        
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
+        }
     </script>
 </body>
 </html>
